@@ -232,4 +232,21 @@
 
         equal($listgroup.find('.list-group-item.active').length, 0, 'all item are unselected')
     })
+	
+    test('should update listgroup after select is updated and the update option is called', function () {
+        var $select = $('<select>_</select>')
+                        .append('<option value="1" selected>foo</option>')
+                        .append('<option value="2" selected>foo</option>')
+                        .listgroup()
+
+        var $listgroup = $select.siblings('.list-group')
+        
+        $select.empty();
+        
+        $select.append('<option value="3" >foo</option>');
+        
+        $select.listgroup('update');
+        
+        equal($listgroup.find('.list-group-item').length, 1, 'items are updated')
+    })
 })

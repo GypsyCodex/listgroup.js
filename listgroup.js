@@ -116,23 +116,7 @@
         if ($select.attr('multiple'))
             $listGroup.attr('data-toggle', 'items');
 
-        $select.find('option').each(function (i, item) {
-            var $item = $(item);
-    
-            var $new = $('<a>')
-                        .attr('href', '#')
-                        .addClass('list-group-item')
-                        .attr('data-value', $item.val())
-                        .text($item.text());
-
-            if ($item.is(':disabled'))
-                $new.addClass('disabled');
-
-            if ($item.css('display') === 'none')
-                $new.addClass('hidden');
-
-            $listGroup.append($new);
-        });
+        this.duplicateOptions($select, $listGroup);
 
         $select.change(function () {
             $listGroup.listgroup({
@@ -160,6 +144,45 @@
 
         return $listGroup;
     };
+    
+	/**
+	 * Update the listgroup. It is useful when you update the select element and you want to copy the options
+	 * in the listgroup.
+	 */
+    SelectList.prototype.update = function() {
+    	var $select = this.$element;
+    	
+    	//Remove old values
+    	var $listGroup = this.$element.data('listgroup').$listGroup;
+    	$listGroup.empty();
+    	
+    	this.duplicateOptions($select, $listGroup);
+    }
+    
+    /**
+     * Duplicates the options from the select element to the listgroup.
+     * @param $select The jQuery select object.
+     * @param $listGroup The jQuery listgroup object.
+     */
+    SelectList.prototype.duplicateOptions = function($select, $listGroup) {
+    	$select.find('option').each(function (i, item) {
+            var $item = $(item);
+    
+            var $new = $('<a>')
+                        .attr('href', '#')
+                        .addClass('list-group-item')
+                        .attr('data-value', $item.val())
+                        .text($item.text());
+
+            if ($item.is(':disabled'))
+                $new.addClass('disabled');
+
+            if ($item.css('display') === 'none')
+                $new.addClass('hidden');
+
+            $listGroup.append($new);
+        });
+    }
 
     
     // LIST GROUP PLUGIN DEFINITION
@@ -175,12 +198,14 @@
                     : new ListGroup(element, option)));
 
             if (option) {
-
                 if (option.unselect)
                     list.unselect(option.unselect);
 
                 if (option.select)
                     list.select(option.select);
+                
+                if (option == "update")
+                	list.update();
             }
         });
     };
