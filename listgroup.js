@@ -73,6 +73,9 @@
         return this;
     };
 
+    ListGroup.prototype.update = function() {
+        return this;
+    }
 
     // SELECTLIST PUBLIC CLASS DEFINITION
     // =======================
